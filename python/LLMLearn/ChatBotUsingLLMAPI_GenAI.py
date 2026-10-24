@@ -1,10 +1,11 @@
+import os
 from google import genai
 from google.genai import types
 
-client = genai.Client()
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 chat = client.chats.create(
-    model="gemini-3.8-flash"
+    model="gemini-3.5-flash-lite"
 )
 
 def chat_with_ai(user_message):
