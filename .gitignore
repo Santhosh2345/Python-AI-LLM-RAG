@@ -5,7 +5,7 @@ venv/
 # Python cache
 __pycache__/
 *.pyc
-*.py
+*.py[cod]
 
 # Pytest
 .pytest_cache/
