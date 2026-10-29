@@ -67,7 +67,7 @@ def chunk_by_sentence(texts, chunk_size=20):
     return chunk
 
 # Split the document into sentences and store in a list fixed length of 20 sentences per chunk with a overlap of 10 characters stored in a list
-def chunk_by_sentence(texts, chunk_size=20, step=10):
+def chunk_by_sentence_overlap(texts, chunk_size=20, step=10):
     chunk = []
     for i in range(0, len(texts), step):
         chunk.append((texts[i:i+chunk_size]))

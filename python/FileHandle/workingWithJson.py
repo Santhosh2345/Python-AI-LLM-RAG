@@ -1,4 +1,4 @@
-from python.FileHandle import fileHandling
+import fileHandling
 import json
 import os.path
 # Take a JSON string representing a person (name, age, city),
