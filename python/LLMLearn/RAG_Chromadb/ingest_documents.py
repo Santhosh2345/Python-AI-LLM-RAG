@@ -37,16 +37,21 @@ def extract_from_pdf(documents):
     
     return all_chunks
 
-# Embedding and getting results for query
-def chroma_db_embedd_and_store_chunks(chunks, query):
-    client = chromadb.Client()
-    collection = client.create_collection(name="General_Knowledge")
-    collection.add(
+client = chromadb.PersistentClient(path="./choma_db")
+collection = client.get_or_create_collection(name="General_Knowledge")
+print("Total stored chunks:", collection.count())
+
+# Embedding and and storing the chunks in local file chorma_db
+def chroma_db_embedd_and_store_chunks(chunks):
+    collection.upsert(
         ids = [f"chunk_{i}" for i in range(len(chunks))],
         documents = [chunk["text"] for chunk in chunks],
         metadatas=[{"source": chunk["source"]} for chunk in chunks]
     )
+    print("Chunks are stored successfully in the chormadb")
 
+# Searching related chunks and return the results
+def search_chunks(query):
     results = collection.query(
         query_texts=query,
         n_results=2
@@ -64,15 +69,10 @@ def chromadb_top_context(results):
             top_context.append(doc)
     return top_context
 
-# Storing all chunks
-all_chunks = extract_from_pdf(doc_list)
-print(all_chunks)
-query = ["What is python?", "give any advice for financial management"]
+if __name__ == "__main__":
+    # Extract PDF text
+    all_chunks = extract_from_pdf(doc_list)
+    print(all_chunks)
 
-# Passing query and chunks to embedd and find the best match
-results = chroma_db_embedd_and_store_chunks(all_chunks, query)
-context = chromadb_top_context(results)
-
-# Calling resuable function called feed the top result contexts and query to the GEMINI AI
-# And getting response from the provided content through GEMINI AI
-rag_def.generate_answer(query, context)
+    # Save embeddings and documents in ChromaDB
+    chroma_db_embedd_and_store_chunks(all_chunks)
