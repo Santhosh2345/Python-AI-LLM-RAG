@@ -38,7 +38,8 @@ def extract_from_pdf(documents):
     return all_chunks
 
 client = chromadb.PersistentClient(path="./choma_db")
-collection = client.get_or_create_collection(name="General_Knowledge")
+chroma_db_name = "General_Knowledge"
+collection = client.get_or_create_collection(name=chroma_db_name)
 print("Total stored chunks:", collection.count())
 
 # Embedding and and storing the chunks in local file chorma_db
